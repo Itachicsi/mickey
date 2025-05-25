@@ -1,6 +1,6 @@
 let time = 0;
 
-function epicycles(x, y, fourier, state) {
+function epicycles(x, y, fourier) {
   for (let i = 0; i < fourier.length; i++) {
     let prevx = x;
     let prevy = y;
@@ -12,8 +12,8 @@ function epicycles(x, y, fourier, state) {
     
     stroke(218, 177, 218, 150);  //cycle color
     noFill();
-    if(state!=0 && i!=0)
-    ellipse(prevx, prevy, radius * 2);
+    if(i!=0)
+    ellipse(prevx, prevy, radius*2);
     stroke(129, 162, 177);    //vector color
     line(prevx, prevy, x, y);
   }
@@ -29,32 +29,31 @@ function objectSketch(path){
 }
 
 function sketching(){
-  objectSketch(path1);
-  objectSketch(path2);
-  objectSketch(path3);
-  objectSketch(path4);
-  objectSketch(path5);
-  objectSketch(path6);
-  objectSketch(path7);
+  for( let i = 0; i < data.length; i++ )
+      objectSketch(pathData[i]);
+
 }
 
 function setup() {
   createCanvas(window.innerWidth, window.innerHeight);
   
   getFourierArray();
+  for(let i = 0; i < data.length; i++){
+    pathData[i] = [];
+  }
 }
-
 function draw() {
   background(0);
 
-  getVertex();
+  getVertex();  //run epic(depend time) get vertex -> path -> sketching
 
   stroke(206, 185, 164); //path color
   strokeWeight(1);
   drawingContext.shadowBlur = 0;
+
   sketching();
 
-  const dt = TWO_PI/fourierX.length;
+  const dt = TWO_PI/fourierData[0].length;
   time = time + dt;
 
   if (time > TWO_PI) {
